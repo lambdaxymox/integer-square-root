@@ -170,7 +170,6 @@ int BigInteger_lt_eq(BigInteger *big_integer1, BigInteger *big_integer2) {
 void BigInteger_shl(BigInteger *big_integer, unsigned int shift_amount) {
     for (unsigned int shift = 0; shift < shift_amount; shift++) {
         unsigned int rem = 0;
-        printf("Shifting.\n");
         for (unsigned int i = 0; i < big_integer->length; i++) {
             unsigned int int_i = big_integer->inner[i];
             big_integer->inner[i] = (int_i << 1) | rem;
