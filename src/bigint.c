@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "bigint.h"
+#include <limits.h>
 
 
 #define MIN(a, b) (((a) < (b)) ? (a) : (b))
@@ -178,7 +179,9 @@ void BigInteger_shl(BigInteger *big_integer, unsigned int shift_amount) {
 
         // We have an overflow from doing the bit shift.
         if (rem != 0) {
+            unsigned int old_length = big_integer->length;
             __BigInteger_expand(big_integer);
+            big_integer->inner[old_length] = rem;
         }
     }
 }
@@ -194,3 +197,64 @@ void BigInteger_shr(BigInteger *big_integer, unsigned int shift_amount) {
     }
 }
 
+void BigInteger_add(BigInteger *big_integer1, BigInteger* big_integer2) {
+    unsigned int carry = 0;
+    unsigned int sum = 0;
+    unsigned int length1 = big_integer1->length;
+    unsigned int length2 = big_integer2->length;
+    unsigned int length_smaller_int = MIN(big_integer1->length, big_integer2->length);
+
+    // Go from least to most significant digit.
+    for (unsigned int i = 0; i < length_smaller_int; i++) {
+        unsigned int digit_i1 = big_integer1->inner[i];
+        unsigned int digit_i2 = big_integer2->inner[i];
+        // Check if addition would overflow.
+        if (digit_i1 > INT_MAX - digit_i2 - carry) {
+            // Overflow.
+            sum = digit_i1 + digit_i2 + carry;
+            carry = 1;
+            big_integer1->inner[i] = sum;
+        } else {
+            // No overflow.
+            sum = digit_i1 + digit_i2 + carry;
+            carry = 0;
+            big_integer1->inner[i] = sum;
+        }
+    }
+
+    if (length1 > length2) {
+        for (unsigned int i = length2; i < length1; i++) {
+            unsigned int digit_i2 = big_integer2->inner[i];
+            // Check for digit overflow.
+            if (digit_i2 > INT_MAX - carry) {
+                // Overflow.
+                sum = digit_i2 + carry;
+                carry = 1;
+                big_integer1->inner[i] = sum;
+            } else {
+                // No overflow.
+                sum = digit_i2 + carry;
+                carry = 0;
+                big_integer1->inner[i] = sum;
+            }
+        }
+    } 
+
+    if (length2 > length1) {
+        for (unsigned int i = length1; i < length2; i++) {
+            unsigned int digit_i1 = big_integer1->inner[i];
+            // Check for digit overflow.
+            if (digit_i1 > INT_MAX - carry) {
+                // Overflow.
+                sum = digit_i1 + carry;
+                carry = 1;
+                big_integer1->inner[i] = sum;
+            } else {
+                // No overflow.
+                sum = digit_i1 + carry;
+                carry = 0;
+                big_integer1->inner[i] = sum;
+            }
+        }
+    }
+}
