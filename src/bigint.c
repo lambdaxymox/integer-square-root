@@ -33,6 +33,26 @@ int BigInteger_iszero(BigInteger *big_integer) {
     return 1;
 }
 
+BigInteger *BigInteger_from_long(unsigned long val) {
+    BigInteger * new_integer = BigInteger_create();
+    for (unsigned int i = 0; i < sizeof(unsigned long); i++) {
+        char byte_i = (char) ((val >> i*sizeof(char)) & 0xFF);
+        new_integer->inner[i] = byte_i;
+    }
+
+    return new_integer;
+}
+
+BigInteger *BigInteger_from_int(unsigned int val) {
+    BigInteger * new_integer = BigInteger_create();
+    for (unsigned int i = 0; i < sizeof(unsigned int); i++) {
+        char byte_i = (char) ((val >> i*sizeof(char)) & 0xFF);
+        new_integer->inner[i] = byte_i;
+    }
+
+    return new_integer;
+}
+
 int BigInteger_eq(BigInteger *big_integer1, BigInteger *big_integer2) {
     unsigned int length1 = big_integer1->length;
     unsigned int length2 = big_integer2->length;
@@ -64,7 +84,7 @@ int BigInteger_eq(BigInteger *big_integer1, BigInteger *big_integer2) {
 }
 
 int BigInteger_neq(BigInteger *big_integer1, BigInteger *big_integer2) {
-    return !BigInteger_equals(big_integer1, big_integer2);
+    return !BigInteger_eq(big_integer1, big_integer2);
 }
 
 int BigInteger_gt(BigInteger *big_integer1, BigInteger *big_integer2) {
@@ -133,4 +153,14 @@ int BigInteger_lt(BigInteger *big_integer1, BigInteger *big_integer2) {
     }
 
     return 0;
+}
+
+int BigInteger_gt_eq(BigInteger *big_integer1, BigInteger *big_integer2) {
+    return BigInteger_gt(big_integer1, big_integer2) 
+        || BigInteger_eq(big_integer1, big_integer2);
+}
+
+int BigInteger_lt_eq(BigInteger *big_integer1, BigInteger *big_integer2) {
+    return BigInteger_lt(big_integer1, big_integer2) 
+        || BigInteger_eq(big_integer1, big_integer2);
 }

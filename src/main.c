@@ -3,9 +3,9 @@
 
 
 int main(int argc, char **argv) {
-    BigInteger *zero1 = BigInteger_create();
-    BigInteger *zero2 = BigInteger_create();
-    printf("%d\n", !BigInteger_eq(zero1, zero2));
-    BigInteger_destroy(zero1);
-    BigInteger_destroy(zero2);
+    BigInteger *bigint1 = BigInteger_from_int(245);
+    BigInteger *bigint2 = BigInteger_from_int(567);
+    printf("%d\n", BigInteger_gt(bigint2, bigint1));
+    BigInteger_destroy(bigint1);
+    BigInteger_destroy(bigint2);
 }
