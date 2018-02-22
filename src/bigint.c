@@ -33,7 +33,7 @@ int BigInteger_iszero(BigInteger *big_integer) {
     return 1;
 }
 
-int BigInteger_equals(BigInteger *big_integer1, BigInteger *big_integer2) {
+int BigInteger_eq(BigInteger *big_integer1, BigInteger *big_integer2) {
     unsigned int length1 = big_integer1->length;
     unsigned int length2 = big_integer2->length;
     unsigned int length_smaller_int = MIN(big_integer1->length, big_integer2->length);
@@ -63,6 +63,74 @@ int BigInteger_equals(BigInteger *big_integer1, BigInteger *big_integer2) {
     return 1;
 }
 
-int BigInteger_not_equals(BigInteger *big_integer1, BigInteger *big_integer2) {
+int BigInteger_neq(BigInteger *big_integer1, BigInteger *big_integer2) {
     return !BigInteger_equals(big_integer1, big_integer2);
+}
+
+int BigInteger_gt(BigInteger *big_integer1, BigInteger *big_integer2) {
+    unsigned int length1 = big_integer1->length;
+    unsigned int length2 = big_integer2->length;
+    unsigned int length_smaller_int = MIN(big_integer1->length, big_integer2->length);
+    
+    for (unsigned int i = 0; i < length_smaller_int; i++) {
+        if (big_integer1->inner[i] > big_integer2->inner[i]) {
+            return 1;
+        }
+
+        if (big_integer1->inner[i] < big_integer2->inner[i]) {
+            return 0;
+        }
+    }
+
+    if (length1 > length2) {
+        for (unsigned int i = length2; i < length1; i++) {
+            if (big_integer1->inner[i] != 0) {
+                return 1;
+            }
+        }
+    } 
+
+    if (length2 > length1) {
+        for (unsigned int i = length1; i < length2; i++) {
+            if (big_integer2->inner[i] != 0) { 
+                return 0;
+            }
+        }
+    }
+
+    return 0;
+}
+
+int BigInteger_lt(BigInteger *big_integer1, BigInteger *big_integer2) {
+    unsigned int length1 = big_integer1->length;
+    unsigned int length2 = big_integer2->length;
+    unsigned int length_smaller_int = MIN(big_integer1->length, big_integer2->length);
+    
+    for (unsigned int i = 0; i < length_smaller_int; i++) {
+        if (big_integer1->inner[i] < big_integer2->inner[i]) {
+            return 1;
+        }
+
+        if (big_integer1->inner[i] > big_integer2->inner[i]) {
+            return 0;
+        }
+    }
+
+    if (length1 > length2) {
+        for (unsigned int i = length2; i < length1; i++) {
+            if (big_integer1->inner[i] != 0) {
+                return 0;
+            }
+        }
+    } 
+
+    if (length2 > length1) {
+        for (unsigned int i = length1; i < length2; i++) {
+            if (big_integer2->inner[i] != 0) { 
+                return 1;
+            }
+        }
+    }
+
+    return 0;
 }
