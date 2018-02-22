@@ -13,7 +13,7 @@ BigInteger *BigInteger_create() {
 }
 
 BigInteger *__BigInteger_create(unsigned int length) {
-    unsigned int *inner = (unsigned int *) malloc(length);
+    unsigned int *inner = (unsigned int *) malloc(length * sizeof(unsigned int));
     memset(inner, 0, length);
 
     BigInteger *big_integer = (BigInteger *) malloc(sizeof(BigInteger));
@@ -167,17 +167,31 @@ int BigInteger_lt_eq(BigInteger *big_integer1, BigInteger *big_integer2) {
         || BigInteger_eq(big_integer1, big_integer2);
 }
 
-void BigInteger_shl(BigInteger *big_integer, int shift_amount) {
-    for (int shift = 0; shift < shift_amount; shift++) {
+void BigInteger_shl(BigInteger *big_integer, unsigned int shift_amount) {
+    for (unsigned int shift = 0; shift < shift_amount; shift++) {
         unsigned int rem = 0;
+        printf("Shifting.\n");
         for (unsigned int i = 0; i < big_integer->length; i++) {
             unsigned int int_i = big_integer->inner[i];
             big_integer->inner[i] = (int_i << 1) | rem;
-            rem = (int_i & (1 << (sizeof(int)-1))) >> (sizeof(int)-1);
+            rem = (int_i & (1 << (sizeof(unsigned int)-1))) >> (sizeof(unsigned int)-1);
         }
+
         // We have an overflow from doing the bit shift.
         if (rem != 0) {
             __BigInteger_expand(big_integer);
         }
     }
 }
+
+void BigInteger_shr(BigInteger *big_integer, unsigned int shift_amount) {
+    for (unsigned int shift = 0; shift < shift_amount; shift++) {
+        unsigned int rem = 0;
+        for (unsigned int i = big_integer->length; i > 0; i--) {
+            unsigned int int_i = big_integer->inner[i-1];
+            big_integer->inner[i-1] = (int_i >> 1) | rem;
+            rem = (int_i & 1) << (sizeof(unsigned int)-1);
+        }
+    }
+}
+

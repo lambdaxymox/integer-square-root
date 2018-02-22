@@ -4,8 +4,11 @@
 
 int main(int argc, char **argv) {
     BigInteger *bigint1 = BigInteger_from_int(245);
-    BigInteger *bigint2 = BigInteger_from_int(567);
-    printf("%d\n", BigInteger_gt(bigint2, bigint1));
-    BigInteger_destroy(bigint1);
-    BigInteger_destroy(bigint2);
+
+
+    BigInteger_shl(bigint1, 4);
+    printf("Done Shifting.\n");
+    printf("%d\n", bigint1->inner[0]);
+
+    return 0;
 }

@@ -9,6 +9,8 @@ BigInteger *BigInteger_create();
 
 BigInteger *__BigInteger_create(unsigned int length);
 
+void __BigInteger_expand(BigInteger *big_integer);
+
 void BigInteger_destroy(BigInteger *big_integer);
 
 BigInteger *BigInteger_from_int(unsigned int val);
@@ -26,3 +28,7 @@ int BigInteger_lt(BigInteger *big_integer1, BigInteger *big_integer2);
 int BigInteger_gt_eq(BigInteger *big_integer1, BigInteger *big_integer2);
 
 int BigInteger_lt_eq(BigInteger *big_integer1, BigInteger *big_integer2);
+
+void BigInteger_shl(BigInteger *big_integer, unsigned int shift_amount);
+
+void BigInteger_shr(BigInteger *big_integer, unsigned int shift_amount);
