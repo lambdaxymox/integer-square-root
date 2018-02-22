@@ -62,3 +62,7 @@ int BigInteger_equals(BigInteger *big_integer1, BigInteger *big_integer2) {
 
     return 1;
 }
+
+int BigInteger_not_equals(BigInteger *big_integer1, BigInteger *big_integer2) {
+    return !BigInteger_equals(big_integer1, big_integer2);
+}
