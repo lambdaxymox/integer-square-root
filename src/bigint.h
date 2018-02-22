@@ -1,6 +1,6 @@
 struct BigInteger {
     unsigned int length;
-    char *inner;
+    unsigned int *inner;
 };
 
 typedef struct BigInteger BigInteger;
@@ -8,8 +8,6 @@ typedef struct BigInteger BigInteger;
 BigInteger *BigInteger_create();
 
 void BigInteger_destroy(BigInteger *big_integer);
-
-BigInteger *BigInteger_from_long(unsigned long val);
 
 BigInteger *BigInteger_from_int(unsigned int val);
 

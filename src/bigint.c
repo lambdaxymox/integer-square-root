@@ -3,12 +3,14 @@
 #include <string.h>
 #include "bigint.h"
 
+
 #define MIN(a, b) (((a) < (b)) ? (a) : (b))
 #define MAX(a, b) (((a) > (b)) ? (a) : (b))
 
+
 BigInteger *BigInteger_create() {
     unsigned int length = 32;
-    char *inner = (char *) malloc(length);
+    unsigned int *inner = (unsigned int *) malloc(length);
     memset(inner, 0, length);
 
     BigInteger *big_integer = (BigInteger *) malloc(sizeof(BigInteger));
@@ -33,22 +35,9 @@ int BigInteger_iszero(BigInteger *big_integer) {
     return 1;
 }
 
-BigInteger *BigInteger_from_long(unsigned long val) {
-    BigInteger * new_integer = BigInteger_create();
-    for (unsigned int i = 0; i < sizeof(unsigned long); i++) {
-        char byte_i = (char) ((val >> i*sizeof(char)) & 0xFF);
-        new_integer->inner[i] = byte_i;
-    }
-
-    return new_integer;
-}
-
 BigInteger *BigInteger_from_int(unsigned int val) {
     BigInteger * new_integer = BigInteger_create();
-    for (unsigned int i = 0; i < sizeof(unsigned int); i++) {
-        char byte_i = (char) ((val >> i*sizeof(char)) & 0xFF);
-        new_integer->inner[i] = byte_i;
-    }
+    new_integer->inner[0] = val;
 
     return new_integer;
 }
