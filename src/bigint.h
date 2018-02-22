@@ -10,3 +10,5 @@ BigInteger *BigInteger_create();
 void BigInteger_destroy(BigInteger *big_integer);
 
 int BigInteger_iszero(BigInteger *big_integer);
+
+int BigInteger_equals(BigInteger *big_integer1, BigInteger *big_integer2);
