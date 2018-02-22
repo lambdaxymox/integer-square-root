@@ -1,3 +1,7 @@
+#ifndef _BIGINT_H_
+#define _BIGINT_H_
+
+
 struct BigInteger {
     unsigned int length;
     unsigned int *inner;
@@ -32,3 +36,5 @@ int BigInteger_lt_eq(BigInteger *big_integer1, BigInteger *big_integer2);
 void BigInteger_shl(BigInteger *big_integer, unsigned int shift_amount);
 
 void BigInteger_shr(BigInteger *big_integer, unsigned int shift_amount);
+
+#endif
