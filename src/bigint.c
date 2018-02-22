@@ -9,7 +9,10 @@
 
 
 BigInteger *BigInteger_create() {
-    unsigned int length = 32;
+    return __BigInteger_create(32);
+}
+
+BigInteger *__BigInteger_create(unsigned int length) {
     unsigned int *inner = (unsigned int *) malloc(length);
     memset(inner, 0, length);
 
@@ -18,6 +21,16 @@ BigInteger *BigInteger_create() {
     big_integer->inner = inner;
 
     return big_integer;
+}
+
+void __BigInteger_expand(BigInteger *big_integer) {
+    BigInteger *new_big_integer = __BigInteger_create(2 * big_integer->length);
+    void * destination = (void *) new_big_integer->inner;
+    void * source = (void *) big_integer->inner;
+    unsigned int num = big_integer->length;
+    memcpy(destination, source, num);
+    BigInteger_destroy(big_integer);
+    big_integer = new_big_integer;
 }
 
 void BigInteger_destroy(BigInteger *big_integer) {
@@ -152,4 +165,19 @@ int BigInteger_gt_eq(BigInteger *big_integer1, BigInteger *big_integer2) {
 int BigInteger_lt_eq(BigInteger *big_integer1, BigInteger *big_integer2) {
     return BigInteger_lt(big_integer1, big_integer2) 
         || BigInteger_eq(big_integer1, big_integer2);
+}
+
+void BigInteger_shl(BigInteger *big_integer, int shift_amount) {
+    for (int shift = 0; shift < shift_amount; shift++) {
+        unsigned int rem = 0;
+        for (unsigned int i = 0; i < big_integer->length; i++) {
+            unsigned int int_i = big_integer->inner[i];
+            big_integer->inner[i] = (int_i << 1) | rem;
+            rem = (int_i & (1 << (sizeof(int)-1))) >> (sizeof(int)-1);
+        }
+        // We have an overflow from doing the bit shift.
+        if (rem != 0) {
+            __BigInteger_expand(big_integer);
+        }
+    }
 }

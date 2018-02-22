@@ -7,6 +7,8 @@ typedef struct BigInteger BigInteger;
 
 BigInteger *BigInteger_create();
 
+BigInteger *__BigInteger_create(unsigned int length);
+
 void BigInteger_destroy(BigInteger *big_integer);
 
 BigInteger *BigInteger_from_int(unsigned int val);
