@@ -24,6 +24,13 @@ BigInteger *__BigInteger_create(unsigned int length) {
     return big_integer;
 }
 
+BigInteger *BigInteger_one() {
+    BigInteger *big_integer = BigInteger_create();
+    big_integer->inner[0] = 1;
+
+    return big_integer;
+}
+
 void __BigInteger_expand(BigInteger *big_integer) {
     BigInteger *new_big_integer = __BigInteger_create(2 * big_integer->length);
     void * destination = (void *) new_big_integer->inner;
@@ -258,3 +265,26 @@ void BigInteger_add(BigInteger *big_integer1, BigInteger* big_integer2) {
         }
     }
 }
+
+void BigInteger_dec(BigInteger *big_integer) {
+    
+}
+
+//#define NEXT(n, i)  (((n) + (i)/(n)) >> 1)  
+  
+//BigInteger *isqrt(BigInteger *number) {
+//    BigInteger *one = BigInteger_one();  
+//    BigInteger *n = BigInteger_one();  
+//    BigInteger *n1 = NEXT(n, number);  
+//  
+//    while (BigInteger_gt(abs(n1 - n), one)) {
+//        n  = n1;
+//        n1 = NEXT(n, number);
+//    }
+//
+//    while (BigInteger_gt(BigInteger_mult(n1, n1), number) {
+//        BigInteger_dec(n1);
+//    }
+//
+//    return n1;  
+//}
